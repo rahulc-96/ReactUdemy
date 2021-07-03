@@ -46,7 +46,7 @@ const SimpleInput = (props) => {
       </div>
       <div className= {`${!renderEmailError ? 'form-control' : 'form-control invalid' }`}>
         <label htmlFor='email'>Your Email</label>
-        <input value = {enteredMail} onBlur = {onBlurHandler} onChange= {onChangeHandler} type='text' id='email' />
+        <input value = {enteredMail} onBlur = {onBlurHandler} onChange= {onChangeHandler} type='email' id='email' />
          {
            renderEmailError && <p className = 'error-text' > Enter Valid Email</p>
          }
