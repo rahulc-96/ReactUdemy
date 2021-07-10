@@ -1,23 +1,40 @@
-import {useState} from 'react'
-
+import {useReducer} from 'react'
 const useInput = (validator) => {
-    const [inputTouched, setInputTouched] = useState(false);
-    const [enteredValue, setEnteredValue] = useState("");
-    const inputIsValid = validator(enteredValue);
-    const isError = !inputIsValid && inputTouched;
 
+  const defaultState = {
+    inputTouched: false,
+    enteredValue: ""
+  };
+
+  const inputReducer = (prevState, action) => {
+    if(action.type === 'change'){
+        return {...prevState, enteredValue:action.value}   
+    }
+    if(action.type === 'blur'){
+      return {...prevState, inputTouched: true}
+    }
+    if(action.type === 'reset'){
+      return defaultState
+    }
+    return defaultState;
+  }
+  
+  const [currentState, inputDispatcher] = useReducer(inputReducer, defaultState);
+
+  const {enteredValue, inputTouched} = currentState
+  const inputIsValid = validator(enteredValue);
+  const isError = !inputIsValid && inputTouched;
 
   const onChangeHandler = (inputValue) => {
-    setEnteredValue(inputValue);
+    inputDispatcher({type:'change', value:inputValue})
   }
 
   const reset = () => {
-     setEnteredValue("");
-     setInputTouched(false);
+    inputDispatcher({type:'reset', value:''})
   }
 
   const onBlurHandler = (event) => {
-        setInputTouched(true)
+    inputDispatcher({type:'blur', value:''})
   }
 
   return {
